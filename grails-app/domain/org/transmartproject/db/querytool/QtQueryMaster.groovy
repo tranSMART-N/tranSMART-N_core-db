@@ -19,7 +19,8 @@ class QtQueryMaster {
 
 	static mapping = {
         table           schema: 'I2B2DEMODATA'
-        id              column: "query_master_id",  generator: "identity"
+        id generator:'sequence', params:[sequence:'SEQ_SEARCH_DATA_ID']
+        id              column: "query_master_id" //,  generator: "identity"
         generatedSql    type:   'text'
         requestXml      type:   'text'
         i2b2RequestXml  column: 'I2B2_REQUEST_XML', type: 'text'

@@ -46,4 +46,6 @@ class I2b2 extends AbstractI2b2Metadata implements Serializable {
         AbstractI2b2Metadata.constraints()
 	}
 
+
+
 }

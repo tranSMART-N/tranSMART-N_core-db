@@ -91,11 +91,11 @@ class PatientSetQueryBuilderService {
         }
 
 
-        def sql = "INSERT INTO qt_patient_set_collection (result_instance_id," +
+        def sql = "INSERT INTO qt_patient_set_collection (PATIENT_SET_COLL_ID, result_instance_id," +
                 " patient_num, set_index) " +
-                "SELECT ${resultInstance.id}, P.patient_num, " +
-                " row_number() OVER () " +
-                "FROM ($patientSubQuery ORDER BY 1) P"
+                "SELECT next value for qt_sq_qpr_pcid, ${resultInstance.id}, P.patient_num, " +
+                " row_number() OVER (order by null) " +
+                "FROM ($patientSubQuery ORDER BY 1) P "
 
         log.debug "SQL statement: $sql"
 

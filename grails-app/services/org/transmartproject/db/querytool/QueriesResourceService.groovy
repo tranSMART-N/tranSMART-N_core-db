@@ -63,18 +63,22 @@ class QueriesResourceService implements QueriesResource {
 
         // 6. Build the patient set
         def setSize
-        def sql
+//        def sql
+        String sql
         try {
              sql = patientSetQueryBuilderService.buildPatientSetQuery(
                     resultInstance, definition)
 
             sessionFactory.currentSession.doWork ({ Connection conn ->
                 def statement
-                statement = conn.prepareStatement('SAVEPOINT doWork')
-                statement.execute()
+                // HX 2013-10-31
+//                statement = conn.prepareStatement('SAVEPOINT doWork')
+//                statement = conn.prepareStatement()
+//                statement.execute()
 
                 statement = conn.prepareStatement(sql)
                 setSize = statement.executeUpdate()
+//                setSize = statement.execute()
 
                 log.debug "Inserted $setSize rows into qt_patient_set_collection"
             } as Work)
@@ -88,7 +92,8 @@ class QueriesResourceService implements QueriesResource {
 
             // Rollback to save point
             sessionFactory.currentSession.createSQLQuery(
-                    'ROLLBACK TO SAVEPOINT doWork').executeUpdate()
+//                    'ROLLBACK TO SAVEPOINT doWork').executeUpdate()
+                    'ROLLBACK').executeUpdate()
 
             StringWriter sw = new StringWriter()
             e.printStackTrace(new PrintWriter(sw, true))

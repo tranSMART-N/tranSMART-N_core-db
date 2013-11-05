@@ -50,7 +50,9 @@ A runtime dependency for tranSMART that implements the Core API
     }
 
     def doWithDynamicMethods = { ctx ->
-        String.metaClass.asLikeLiteral = { replaceAll(/[\\%_]/, '\\\\$0') }
+        // HX 2013-10-29
+//        String.metaClass.asLikeLiteral = { replaceAll(/[\\%_]/, '\\\\$0') }
+        String.metaClass.asLikeLiteral = { replaceAll(/[%_]/, '@$0') }
     }
 
     def doWithApplicationContext = { applicationContext ->
