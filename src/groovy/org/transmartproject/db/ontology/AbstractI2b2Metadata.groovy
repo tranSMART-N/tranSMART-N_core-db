@@ -119,14 +119,18 @@ abstract class AbstractI2b2Metadata extends AbstractQuerySpecifyingType
     @Override
     List<OntologyTerm> getChildren(boolean showHidden = false,
                                    boolean showSynonyms = false) {
+
         HibernateCriteriaBuilder c
+
         def fullNameSearch = this.conceptKey.conceptFullName.toString()
                 .asLikeLiteral() + '%'
 
         c = createCriteria()
         def ret = c.list {
             and {
-                like 'fullName', fullNameSearch
+                // HX 2013-10-31
+//                like 'fullName', fullNameSearch
+                sqlRestriction( "c_fullName like '" + fullNameSearch  + "' escape '@'")
                 eq 'level', level + 1
                 if (!showHidden) {
                     not { like 'cVisualattributes', '_H%' }
@@ -137,8 +141,27 @@ abstract class AbstractI2b2Metadata extends AbstractQuerySpecifyingType
             }
             order('name')
         }
+
+
         ret.each { it.setTableCode(getTableCode()) }
         ret
+//
+//        Map paramsMap = [fullNameSearch: fullNameSearch, level: level]
+//        StringBuffer hqlBuff = new StringBuffer();
+//
+//        hqlBuff.append("FROM AbstractI2b2Metadata WHERE fullName LIKE :fullNameSearch ESCAPE '@' AND level = :level ")
+//        if(!showHidden) {
+//            hqlBuff.append(" AND cVisualattributes NOT LIKE '_H%'")
+//        }
+//
+//        if(!showSynonyms) {
+//            hqlBuff.append(" AND cSynonymCd = 'N")
+//        }
+//
+//        hqlBuff.append(" ORDER BY name")
+//
+//        def results = AbstractI2b2Metadata.findAll()
+//        return results
     }
 
     @Override

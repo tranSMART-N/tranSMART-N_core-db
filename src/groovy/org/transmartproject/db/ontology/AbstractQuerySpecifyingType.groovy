@@ -33,6 +33,7 @@ abstract class AbstractQuerySpecifyingType implements MetadataSelectQuerySpecifi
             return v
         }
 
+        // HX
         if (columnDataType == 'T' && v.length() > 2) {
             if (operator.equalsIgnoreCase('like')) {
                 if (v[0] != "'" && !v[0] != '(') {
@@ -45,9 +46,11 @@ abstract class AbstractQuerySpecifyingType implements MetadataSelectQuerySpecifi
                 }
             }
 
+            // HX 2013-10-31
             if (v[0] != "'") {
                 v = v.replaceAll(/'/, "''") /* escape single quotes */
-                v = "'$v'"
+//                v = "'$v'"
+                v = "'$v' escape '@' "
             }
 
         }
