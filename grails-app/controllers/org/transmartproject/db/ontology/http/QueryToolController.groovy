@@ -1,5 +1,4 @@
 package org.transmartproject.db.ontology.http
-
 import grails.converters.JSON
 import org.transmartproject.core.exceptions.InvalidRequestException
 import org.transmartproject.core.querytool.QueryDefinition
@@ -8,6 +7,7 @@ class QueryToolController {
 
     def queryDefinitionXmlService
     def queriesResourceService
+//    def netezzaQueriesResourceService
 
     /**
      * Creates a query definition and runs it. The input format is a subset
@@ -19,7 +19,8 @@ class QueryToolController {
         QueryDefinition definition =
             queryDefinitionXmlService.fromXml(request.reader)
 
-        def result = queriesResourceService.runQuery(definition)
+//        def result = queriesResourceService.runQuery(definition)
+        def result = queriesResourceService.runQuery(definition, "netezza")
         render result as JSON
     }
 
