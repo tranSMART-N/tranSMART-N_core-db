@@ -42,6 +42,8 @@ class QueriesResourceService implements QueriesResource {
 
         groovy.sql.Sql nsql = new groovy.sql.Sql(dataSource)
 
+        nsql.execute("SET SERIALIZABLE=0")
+
         String query
         String name = definition.name
         String userId = grailsApplication.config.org.transmartproject.i2b2.user_id
@@ -54,6 +56,7 @@ class QueriesResourceService implements QueriesResource {
             queryMasterId = v
         }
 
+        nsql.execute("SET SERIALIZABLE=0")
         query = "insert into qt_query_master(QUERY_MASTER_ID, NAME, USER_ID, GROUP_ID, CREATE_DATE, REQUEST_XML) values(?, ?, ?, ?, now(), ?) "
         nsql.execute(query, [queryMasterId, name, userId, groupId, requestXml])
 
@@ -73,6 +76,7 @@ class QueriesResourceService implements QueriesResource {
             queryInstanceId = v
         }
 
+        nsql.execute("SET SERIALIZABLE=0")
         query = "insert into qt_query_instance(QUERY_INSTANCE_ID, QUERY_MASTER_ID, USER_ID, GROUP_ID, STATUS_TYPE_ID, START_DATE) values(?, ?, ?, ?, ?, now())"
         nsql.execute(query, [queryInstanceId, queryMasterId, userId, groupId, QueryStatus.PROCESSING.id])
 
@@ -101,6 +105,7 @@ class QueriesResourceService implements QueriesResource {
             queryResultInstanceId = v
         }
 
+        nsql.execute("SET SERIALIZABLE=0")
         query = "insert into QT_QUERY_RESULT_INSTANCE(RESULT_INSTANCE_ID, QUERY_INSTANCE_ID, RESULT_TYPE_ID, STATUS_TYPE_ID, START_DATE) values(?, ?, 1, ?, now())"
         nsql.execute(query, [queryResultInstanceId, queryInstanceId, QueryStatus.PROCESSING.id])
 
@@ -122,6 +127,9 @@ class QueriesResourceService implements QueriesResource {
 //                statement = conn.prepareStatement('SAVEPOINT doWork')
 //                statement = conn.prepareStatement()
 //                statement.execute()
+
+                statement = conn.prepareStatement("SET SERIALIZABLE=0")
+                statement.execute()
 
                 statement = conn.prepareStatement(sql)
                 setSize = statement.executeUpdate()
@@ -153,6 +161,7 @@ class QueriesResourceService implements QueriesResource {
             queryInstance.statusTypeId = QueryStatus.ERROR.id
             queryInstance.message = sw.toString()
 
+            nsql.execute("SET SERIALIZABLE=0")
             if (!resultInstance.save()) {
                 log.error("After exception from " +
                         "patientSetQueryBuilderService::buildService, " +
@@ -171,6 +180,7 @@ class QueriesResourceService implements QueriesResource {
         queryInstance.endDate = new Date()
         queryInstance.statusTypeId = QueryStatus.COMPLETED.id
 
+        nsql.execute("SET SERIALIZABLE=0")
         def newResultInstance = resultInstance.save()
         if (!newResultInstance) {
             throw new RuntimeException('Failure saving resultInstance after ' +
