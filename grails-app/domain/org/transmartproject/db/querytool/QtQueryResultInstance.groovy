@@ -15,18 +15,21 @@ class QtQueryResultInstance implements QueryResult {
     String            description
     Long              realSetSize
     String            obfuscMethod
-    QtQueryInstance   queryInstance
+//    QtQueryInstance   queryInstance
+    Long              queryInstanceId
 
-	static belongsTo = QtQueryInstance
+//	static belongsTo = QtQueryInstance
 
     static hasMany = [patientSet: QtPatientSetCollection]
 
 	static mapping = {
-        table          schema: 'I2B2DEMODATA'
+//        table          schema: 'I2B2DEMODATA'
+        table          'QT_QUERY_RESULT_INSTANCE'
         id             generator:'sequence', params:[sequence:'qt_sq_qri_qriid']
         id             column: "result_instance_id" //, generator: "identity"
         errorMessage   column: 'message'
-        queryInstance  column: 'query_instance_id'
+//        queryInstance  column: 'query_instance_id'
+        queryInstanceId  column: 'query_instance_id'
 
 		version false
 	}

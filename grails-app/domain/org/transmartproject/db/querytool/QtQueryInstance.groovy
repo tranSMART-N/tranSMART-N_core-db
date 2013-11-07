@@ -16,7 +16,8 @@ class QtQueryInstance {
 	static belongsTo = QtQueryMaster
 
 	static mapping = {
-        table       schema: 'I2B2DEMODATA'
+//        table       schema: 'I2B2DEMODATA'
+        table       'QT_QUERY_INSTANCE'
         id          generator:'sequence', params:[sequence:'qt_sq_qi_qiid']
 		id          column: "query_instance_id"//, generator: "identity"
         queryMaster column: 'query_master_id'
