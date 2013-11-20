@@ -319,9 +319,9 @@ class QueriesResourceService implements QueriesResource {
     QueryDefinition getQueryDefinitionForResult(QueryResult result)
     throws NoSuchResourceException {
         List answer = QtQueryResultInstance.executeQuery(
-//                '''SELECT R.queryInstance.queryMaster.requestXml FROM
-//                        QtQueryResultInstance R WHERE R = ?''',
-//                [result]
+                '''SELECT R.queryInstance.queryMaster.requestXml FROM
+                        QtQueryResultInstance R WHERE R = ?''',
+               [result]
         )
         if (!answer) {
             throw new NoSuchResourceException('Could not find definition for ' +

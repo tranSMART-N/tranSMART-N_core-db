@@ -15,6 +15,7 @@ class OntologyTermMarshaller {
                 key                : term.key,
                 level              : term.level,
                 fullName           : term.fullName,
+                comment            : term.comment,
                 name               : term.name,
                 tooltip            : term.tooltip,
                 visualAttributes   : term.visualAttributes,

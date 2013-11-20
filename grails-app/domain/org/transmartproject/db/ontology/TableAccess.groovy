@@ -104,6 +104,11 @@ class TableAccess extends AbstractQuerySpecifyingType implements
     }
 
     @Override
+    String getComment() {
+        cComment.toString()
+    }
+
+    @Override
     String getKey() {
         conceptKey.toString()
     }

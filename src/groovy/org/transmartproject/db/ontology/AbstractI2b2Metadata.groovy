@@ -10,6 +10,7 @@ abstract class AbstractI2b2Metadata extends AbstractQuerySpecifyingType
 
     Integer      level
     String       fullName
+    String       comment
     String       name
     String       code
     String       tooltip
@@ -26,6 +27,7 @@ abstract class AbstractI2b2Metadata extends AbstractQuerySpecifyingType
 
     static mapping = {
         fullName             column:   'C_FULLNAME'
+        comment              column:   'C_COMMENT'
         level                column:   'C_HLEVEL'
         name                 column:   'C_NAME'
         code                 column:   'C_BASECODE'
