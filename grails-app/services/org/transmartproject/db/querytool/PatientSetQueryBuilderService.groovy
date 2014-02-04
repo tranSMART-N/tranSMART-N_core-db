@@ -58,7 +58,7 @@ class PatientSetQueryBuilderService {
             [
                 id: panelNum++,
                 select: "SELECT patient_num " +
-                        "FROM observation_fact WHERE $bigPredicate",
+                        "FROM i2b2demodata.observation_fact WHERE $bigPredicate",
                 invert: panel.invert,
             ]
         }.sort { a, b ->
@@ -75,7 +75,7 @@ class PatientSetQueryBuilderService {
                  * because there is only one select; we must adda a group by */
                 patientSubQuery =  "$panel.select GROUP BY patient_num"
             } else {
-                patientSubQuery = "SELECT patient_num FROM patient_dimension " +
+                patientSubQuery = "SELECT patient_num FROM i2b2demodata.patient_dimension " +
                         "EXCEPT ($panel.select)"
             }
         } else {
@@ -91,9 +91,9 @@ class PatientSetQueryBuilderService {
         }
 
 
-        def sql = "INSERT INTO qt_patient_set_collection (PATIENT_SET_COLL_ID, result_instance_id," +
+        def sql = "INSERT INTO i2b2demodata.qt_patient_set_collection (PATIENT_SET_COLL_ID, result_instance_id," +
                 " patient_num, set_index) " +
-                "SELECT next value for qt_sq_qpr_pcid, ${resultInstance.id}, P.patient_num, " +
+                "SELECT nextval ('i2b2demodata.qt_sq_qpr_pcid'), ${resultInstance.id}, P.patient_num, " +
                 " row_number() OVER (order by null) " +
                 "FROM ($patientSubQuery ORDER BY 1) P "
 

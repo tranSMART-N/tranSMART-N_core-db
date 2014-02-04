@@ -42,7 +42,7 @@ class QueriesResourceService implements QueriesResource {
 
         groovy.sql.Sql nsql = new groovy.sql.Sql(dataSource)
 
-        nsql.execute("SET SERIALIZABLE=0")
+        //nsql.execute("SET SERIALIZABLE=0")
 
         String query
         String name = definition.name
@@ -51,13 +51,13 @@ class QueriesResourceService implements QueriesResource {
         String requestXml = queryDefinitionXmlService.toXml(definition)
 
         def queryMasterId
-        def m = nsql.firstRow("select next value for QT_SQ_QM_QMID")
+        def m = nsql.firstRow("select nextval ('i2b2demodata.QT_SQ_QM_QMID')")
         m.each { k, v ->
             queryMasterId = v
         }
 
-        nsql.execute("SET SERIALIZABLE=0")
-        query = "insert into qt_query_master(QUERY_MASTER_ID, NAME, USER_ID, GROUP_ID, CREATE_DATE, REQUEST_XML) values(?, ?, ?, ?, now(), ?) "
+        //nsql.execute("SET SERIALIZABLE=0")
+        query = "insert into i2b2demodata.qt_query_master(QUERY_MASTER_ID, NAME, USER_ID, GROUP_ID, CREATE_DATE, REQUEST_XML) values(?, ?, ?, ?, now(), ?) "
         nsql.execute(query, [queryMasterId, name, userId, groupId, requestXml])
 
         // 2. Populate qt_query_instance
@@ -71,13 +71,13 @@ class QueriesResourceService implements QueriesResource {
 //        queryMaster.addToQueryInstances(queryInstance)
 
         def queryInstanceId
-        def m2 = nsql.firstRow("select next value for QT_SQ_QI_QIID")
+        def m2 = nsql.firstRow("select nextval ('i2b2demodata.QT_SQ_QI_QIID')")
         m2.each { k, v ->
             queryInstanceId = v
         }
 
-        nsql.execute("SET SERIALIZABLE=0")
-        query = "insert into qt_query_instance(QUERY_INSTANCE_ID, QUERY_MASTER_ID, USER_ID, GROUP_ID, STATUS_TYPE_ID, START_DATE) values(?, ?, ?, ?, ?, now())"
+        //nsql.execute("SET SERIALIZABLE=0")
+        query = "insert into i2b2demodata.qt_query_instance(QUERY_INSTANCE_ID, QUERY_MASTER_ID, USER_ID, GROUP_ID, STATUS_TYPE_ID, START_DATE) values(?, ?, ?, ?, ?, now())"
         nsql.execute(query, [queryInstanceId, queryMasterId, userId, groupId, QueryStatus.PROCESSING.id])
 
         QtQueryInstance queryInstance = (new QtQueryInstance()).get(queryInstanceId)
@@ -100,13 +100,13 @@ class QueriesResourceService implements QueriesResource {
 //        }
 
         def queryResultInstanceId
-        def m3 = nsql.firstRow("select next value for QT_SQ_QRI_QRIID")
+        def m3 = nsql.firstRow("select nextval ('i2b2demodata.QT_SQ_QRI_QRIID')")
         m3.each { k, v ->
             queryResultInstanceId = v
         }
 
-        nsql.execute("SET SERIALIZABLE=0")
-        query = "insert into QT_QUERY_RESULT_INSTANCE(RESULT_INSTANCE_ID, QUERY_INSTANCE_ID, RESULT_TYPE_ID, STATUS_TYPE_ID, START_DATE) values(?, ?, 1, ?, now())"
+        //nsql.execute("SET SERIALIZABLE=0")
+        query = "insert into i2b2demodata.QT_QUERY_RESULT_INSTANCE(RESULT_INSTANCE_ID, QUERY_INSTANCE_ID, RESULT_TYPE_ID, STATUS_TYPE_ID, START_DATE) values(?, ?, 1, ?, now())"
         nsql.execute(query, [queryResultInstanceId, queryInstanceId, QueryStatus.PROCESSING.id])
 
         QtQueryResultInstance resultInstance = (new QtQueryResultInstance()).get(queryResultInstanceId)
@@ -128,8 +128,8 @@ class QueriesResourceService implements QueriesResource {
 //                statement = conn.prepareStatement()
 //                statement.execute()
 
-                statement = conn.prepareStatement("SET SERIALIZABLE=0")
-                statement.execute()
+                //statement = conn.prepareStatement("SET SERIALIZABLE=0")
+                //statement.execute()
 
                 statement = conn.prepareStatement(sql)
                 setSize = statement.executeUpdate()
@@ -161,7 +161,7 @@ class QueriesResourceService implements QueriesResource {
             queryInstance.statusTypeId = QueryStatus.ERROR.id
             queryInstance.message = sw.toString()
 
-            nsql.execute("SET SERIALIZABLE=0")
+           // nsql.execute("SET SERIALIZABLE=0")
             if (!resultInstance.save()) {
                 log.error("After exception from " +
                         "patientSetQueryBuilderService::buildService, " +
@@ -180,7 +180,7 @@ class QueriesResourceService implements QueriesResource {
         queryInstance.endDate = new Date()
         queryInstance.statusTypeId = QueryStatus.COMPLETED.id
 
-        nsql.execute("SET SERIALIZABLE=0")
+        //nsql.execute("SET SERIALIZABLE=0")
         def newResultInstance = resultInstance.save()
         if (!newResultInstance) {
             throw new RuntimeException('Failure saving resultInstance after ' +
