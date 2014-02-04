@@ -24,8 +24,8 @@ class QtQueryResultInstance implements QueryResult {
 
 	static mapping = {
 //        table          schema: 'I2B2DEMODATA'
-        table          'QT_QUERY_RESULT_INSTANCE'
-        id             generator:'sequence', params:[sequence:'qt_sq_qri_qriid']
+        table          'I2B2DEMODATA.QT_QUERY_RESULT_INSTANCE'
+        id             generator:'sequence', params:[sequence:'I2B2DEMODATA.qt_sq_qri_qriid']
         id             column: "result_instance_id" //, generator: "identity"
         errorMessage   column: 'message'
         queryInstance  column: 'query_instance_id'
